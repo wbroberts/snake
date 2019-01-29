@@ -1,0 +1,109 @@
+body {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 2px;
+  font-weight: 400;
+}
+
+.score {
+  font-family: sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 10px;
+  text-align: center;
+}
+
+.menu {
+  box-shadow: 2px 2px 20px 0 #000;
+  color: #cee9e0;
+  opacity: 0;
+  padding: 30px;
+  position: absolute;
+  text-align: center;
+  width: 260px;
+}
+
+.settings {
+  display: flex;
+  height: 25px;
+  justify-content: space-evenly;
+  margin: 8px auto;
+  width: 50%;
+}
+
+.settings div:hover {
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 200ms ease-in;
+}
+
+.high-score {
+  opacity: 0.8;
+  font-size: 1.2em;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  letter-spacing: 1px;
+  margin: 18px 0;
+  width: 100%;
+}
+
+.high-score span {
+  font-weight: 400;
+  font-size: 1.5em;
+  opacity: 1;
+}
+
+.start {
+  border: none;
+  color: white;
+  font-size: 1em;
+  font-weight: 200;
+  letter-spacing: 1px;
+  outline: none;
+  padding: 10px 20px;
+  transition: opacity 250ms ease-in;
+}
+
+.start:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.slide-in {
+  animation: slide-in 500ms forwards ease-out;
+}
+
+.slide-out {
+  animation: slide-out 400ms forwards ease-in;
+}
+
+@keyframes slide-in {
+  0% {
+    top: 800px;
+    opacity: 0;
+  }
+
+  100% {
+    top: 200px;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    top: 200px;
+    opacity: 1;
+  }
+
+  100% {
+    top: -400px;
+    opacity: 0;
+  }
+}
