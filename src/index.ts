@@ -133,14 +133,26 @@ const getTheme = () => {
   });
 };
 
+const showButtons = () => {
+  const div: HTMLElement = document.querySelector('.mobile-controls');
+  div.style.opacity = '1';
+};
+
+const hideButtons = () => {
+  const div: HTMLElement = document.querySelector('.mobile-controls');
+  div.style.opacity = '0';
+};
+
 const resizeCanvas = () => {
   const h = window.innerHeight * 0.85;
   const innerW = window.innerWidth;
 
   if (h >= innerW) {
     c.canvas.height = innerW * 0.9;
+    showButtons();
   } else {
     c.canvas.height = window.innerHeight * 0.85;
+    hideButtons();
   }
 
   c.canvas.width = c.canvas.height;
@@ -195,11 +207,27 @@ window.onload = () => {
 
   startBtn = document.querySelector('button');
   startBtn.addEventListener('click', () => startGame());
-
   window.addEventListener('resize', resizeCanvas);
+
+  touchControls('up');
+  touchControls('down');
+  touchControls('right');
+  touchControls('left');
 
   getTheme();
   c.render(ctx);
 
   loop = gameLoop;
+};
+
+const touchControls = (direction: string): void => {
+  const control = document.getElementById(direction);
+
+  control.addEventListener('touchstart', () => {
+    controller[direction] = true;
+  });
+
+  control.addEventListener('touchend', () => {
+    controller[direction] = false;
+  });
 };

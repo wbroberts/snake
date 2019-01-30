@@ -91,19 +91,72 @@ h1 {
   }
 
   100% {
-    top: 200px;
+    top: 20%;
     opacity: 1;
   }
 }
 
 @keyframes slide-out {
   0% {
-    top: 200px;
+    top: 20%;
     opacity: 1;
   }
 
   100% {
-    top: -400px;
+    top: -40%;
     opacity: 0;
   }
+}
+
+.control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background: #00000028;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  outline: none;
+  margin: 5px;
+}
+
+.mobile-controls {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 50px;
+}
+
+.mobile-controls div {
+  display: flex;
+  flex-direction: column;
+}
+
+i {
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 5px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
 }

@@ -35,6 +35,22 @@ export class Controller {
     return this.keys.ArrowLeft;
   }
 
+  set up(change: boolean) {
+    this.keys.ArrowUp = change;
+  }
+
+  set down(change: boolean) {
+    this.keys.ArrowDown = change;
+  }
+
+  set right(change: boolean) {
+    this.keys.ArrowRight = change;
+  }
+
+  set left(change: boolean) {
+    this.keys.ArrowLeft = change;
+  }
+
   onKeyDown(event: KeyboardEvent): void {
     this.keys[event.key] = true;
   }
