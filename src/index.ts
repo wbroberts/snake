@@ -13,6 +13,8 @@ const state = new GameState(storage);
 const cols = 20;
 const maxTimeStep = 4;
 const startingTimeStep = 30;
+const grid = new Grid(cols, ctx);
+const snake = new Snake(grid.size);
 
 let gameTime = 0;
 let fps = startingTimeStep;
@@ -24,9 +26,6 @@ let startBtn: HTMLElement;
 let settings: HTMLElement;
 let highScore: HTMLElement;
 let loop;
-
-const grid = new Grid(cols, ctx);
-const snake = new Snake(grid.size);
 
 const draw = () => {
   c.render(ctx);
@@ -124,6 +123,33 @@ const gameLoop = () => {
   requestAnimationFrame(gameLoop);
 };
 
+const getTheme = () => {
+  storage.getItem('theme').then(theme => {
+    if (theme) {
+      setTheme(theme);
+    } else {
+      setTheme(green);
+    }
+  });
+};
+
+const resizeCanvas = () => {
+  const h = window.innerHeight * 0.85;
+  const innerW = window.innerWidth;
+
+  if (h >= innerW) {
+    c.canvas.height = innerW * 0.9;
+  } else {
+    c.canvas.height = window.innerHeight * 0.85;
+  }
+
+  c.canvas.width = c.canvas.height;
+  ctx.canvas.height = c.canvas.height;
+  ctx.canvas.width = c.canvas.width;
+  grid.updateWidth(c.canvas);
+  c.render(ctx);
+};
+
 const setTheme = ({ ...args }) => {
   const { dark, light } = args;
 
@@ -139,25 +165,28 @@ const setTheme = ({ ...args }) => {
   c.render(ctx);
 };
 
-const getTheme = () => {
-  storage.getItem('theme').then(theme => {
-    if (theme) {
-      setTheme(theme);
-    } else {
-      setTheme(green);
-    }
-  });
+const storageReady = () => {
+  if (storage.isReady) {
+    menu.className = 'menu slide-in';
+    storage.getItem('snakeHighScore').then(score => {
+      updateHighScore(score);
+    });
+  } else {
+    setTimeout(() => storageReady(), 300);
+  }
 };
 
 window.onload = () => {
   storage.setup();
+  resizeCanvas();
+
   document.body.appendChild(c.canvas);
 
   score = document.querySelector('.score');
   score.innerHTML = state.score.toString();
 
   menu = document.querySelector('.menu');
-  menu.className = 'menu slide-in';
+  storageReady();
 
   highScore = document.querySelector('span');
 
@@ -167,14 +196,7 @@ window.onload = () => {
   startBtn = document.querySelector('button');
   startBtn.addEventListener('click', () => startGame());
 
-  window.addEventListener('resize', () => {
-    c.canvas.height = window.innerHeight * 0.85;
-    c.canvas.width = c.canvas.height;
-    ctx.canvas.height = c.canvas.height;
-    ctx.canvas.width = c.canvas.width;
-    grid.updateWidth(c.canvas);
-    c.render(ctx);
-  });
+  window.addEventListener('resize', resizeCanvas);
 
   getTheme();
   c.render(ctx);

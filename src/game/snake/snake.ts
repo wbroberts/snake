@@ -3,16 +3,9 @@ export class Snake {
   head: number[];
   tail: number[];
 
-  private velocityX: number = 1;
-  private velocityY: number = 1;
   private bodyStart: Array<number[]> = [[10, 10], [9, 10]];
-
-  private dir = {
-    up: false,
-    down: false,
-    left: false,
-    right: true
-  };
+  private dir = { up: false, down: false, left: false, right: true };
+  private velocity: number = 1;
 
   constructor(public size: number) {
     this.head = this.bodyStart[0];
@@ -20,15 +13,36 @@ export class Snake {
     this.body = this.bodyStart;
   }
 
-  death(): boolean {
-    return false;
-  }
-
-  eat() {
+  eat(): void {
     this.body = [...this.body, this.tail];
   }
 
-  setDir(controller) {
+  move(): void {
+    if (this.dir.up) {
+      this.updateSnake('y', 'up');
+    }
+
+    if (this.dir.down) {
+      this.updateSnake('y', 'down');
+    }
+
+    if (this.dir.right) {
+      this.updateSnake('x', 'right');
+    }
+
+    if (this.dir.left) {
+      this.updateSnake('x', 'left');
+    }
+  }
+
+  reset(): void {
+    this.head = this.bodyStart[0];
+    this.tail = this.bodyStart[1];
+    this.body = this.bodyStart;
+    this.changeDirection('right');
+  }
+
+  setDir(controller): void {
     if (controller.up && !this.dir.down) {
       this.changeDirection('up');
     }
@@ -46,69 +60,23 @@ export class Snake {
     }
   }
 
-  move() {
-    let newBody;
-    let newHead;
-
-    if (this.dir.up) {
-      newBody = [...this.body];
-      newHead = [...this.head];
-      newHead[1] -= this.velocityY;
-      this.head = [...newHead];
-      this.tail = newBody.pop();
-      this.body = [this.head, ...newBody];
-    }
-
-    if (this.dir.down) {
-      newBody = [...this.body];
-      this.tail = newBody.pop();
-      newHead = [...this.head];
-      newHead[1] += this.velocityY;
-      this.head = [...newHead];
-      this.body = [this.head, ...newBody];
-    }
-
-    if (this.dir.right) {
-      newBody = [...this.body];
-      this.tail = newBody.pop();
-      newHead = [...this.head];
-      newHead[0] += this.velocityX;
-      this.head = [...newHead];
-      this.body = [this.head, ...newBody];
-    }
-
-    if (this.dir.left) {
-      newBody = [...this.body];
-      this.tail = newBody.pop();
-      newHead = [...this.head];
-      newHead[0] -= this.velocityX;
-      this.head = [...newHead];
-      this.body = [this.head, ...newBody];
-    }
-  }
-
-  changeDirection(direction: string): void {
+  private changeDirection(direction: string): void {
     Object.keys(this.dir).map(key => {
       key === direction ? (this.dir[direction] = true) : (this.dir[key] = false);
     });
   }
 
-  reset() {
-    this.head = this.bodyStart[0];
-    this.tail = this.bodyStart[1];
-    this.body = this.bodyStart;
-    this.changeDirection('right');
-  }
+  private updateSnake(axis: string, dir: string): void {
+    const index = axis === 'y' ? 1 : 0;
+    const direction = dir === 'right' || dir === 'down' ? this.velocity : -this.velocity;
 
-  get direction() {
-    let direction;
+    const newBody = [...this.body];
+    this.tail = newBody.pop();
 
-    Object.keys(this.dir).filter(key => {
-      if (this.dir[key] === true) {
-        direction = this.dir[key];
-      }
-    });
+    const newHead = [...this.head];
+    newHead[index] += direction;
 
-    return direction;
+    this.head = [...newHead];
+    this.body = [this.head, ...newBody];
   }
 }

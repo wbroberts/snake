@@ -7,11 +7,6 @@ export class Canvas {
   constructor(public color?: string) {
     this.canvas.height = window.innerHeight * 0.8;
     this.canvas.width = this.canvas.height;
-
-    this.canvas.addEventListener('resize', () => {
-      this.canvas.height = window.innerHeight * 0.8;
-      this.canvas.width = this.canvas.height;
-    });
   }
 
   set background(color) {

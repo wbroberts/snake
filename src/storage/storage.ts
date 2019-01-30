@@ -47,7 +47,7 @@ export class Storage {
     try {
       this.storage
         .ready()
-        .then(() => this.storage.setDriver(this.storage.INDEXEDDB))
+        .then(() => this.storage.setDriver([this.storage.INDEXEDDB, this.storage.WEBSQL]))
         .then(() => (this.isReady = true))
         .catch(() => {
           throw Error('Could not initialize storage');
