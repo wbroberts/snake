@@ -20,17 +20,11 @@ export class Snake {
   move(): void {
     if (this.dir.up) {
       this.updateSnake('y', 'up');
-    }
-
-    if (this.dir.down) {
+    } else if (this.dir.down) {
       this.updateSnake('y', 'down');
-    }
-
-    if (this.dir.right) {
+    } else if (this.dir.right) {
       this.updateSnake('x', 'right');
-    }
-
-    if (this.dir.left) {
+    } else if (this.dir.left) {
       this.updateSnake('x', 'left');
     }
   }
@@ -45,17 +39,11 @@ export class Snake {
   setDir(controller): void {
     if (controller.up && !this.dir.down) {
       this.changeDirection('up');
-    }
-
-    if (controller.down && !this.dir.up) {
+    } else if (controller.down && !this.dir.up) {
       this.changeDirection('down');
-    }
-
-    if (controller.right && !this.dir.left) {
+    } else if (controller.right && !this.dir.left) {
       this.changeDirection('right');
-    }
-
-    if (controller.left && !this.dir.right) {
+    } else if (controller.left && !this.dir.right) {
       this.changeDirection('left');
     }
   }

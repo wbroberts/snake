@@ -3,11 +3,12 @@ import { Controller } from './controller/controller';
 import { Canvas, Grid, Snake, Apple } from './game';
 import { Storage } from './storage';
 import { blue, green, purple, addThemes, Theme } from './themes';
+import { hideTouchButtons, showTouchButtons, touchControls } from './dom';
 
 const storage = new Storage('__snake_game');
 const c = new Canvas(blue.dark);
+const ctx = c.ctx;
 
-const ctx = c.canvas.getContext('2d');
 const controller = new Controller();
 const state = new GameState(storage);
 const cols = 20;
@@ -28,7 +29,7 @@ let highScore: HTMLElement;
 let loop;
 
 const draw = () => {
-  c.render(ctx);
+  c.render();
   grid.render(ctx);
 };
 
@@ -133,35 +134,6 @@ const getTheme = () => {
   });
 };
 
-const showButtons = () => {
-  const div: HTMLElement = document.querySelector('.mobile-controls');
-  div.style.opacity = '1';
-};
-
-const hideButtons = () => {
-  const div: HTMLElement = document.querySelector('.mobile-controls');
-  div.style.opacity = '0';
-};
-
-const resizeCanvas = () => {
-  const h = window.innerHeight * 0.85;
-  const innerW = window.innerWidth;
-
-  if (h >= innerW) {
-    c.canvas.height = innerW * 0.9;
-    showButtons();
-  } else {
-    c.canvas.height = window.innerHeight * 0.85;
-    hideButtons();
-  }
-
-  c.canvas.width = c.canvas.height;
-  ctx.canvas.height = c.canvas.height;
-  ctx.canvas.width = c.canvas.width;
-  grid.updateWidth(c.canvas);
-  c.render(ctx);
-};
-
 const setTheme = ({ ...args }) => {
   const { dark, light } = args;
 
@@ -174,23 +146,26 @@ const setTheme = ({ ...args }) => {
   score.style.color = dark;
   startBtn.style.background = dark;
 
-  c.render(ctx);
+  c.render();
 };
 
-const storageReady = () => {
+const readyStorage = () => {
   if (storage.isReady) {
     menu.className = 'menu slide-in';
     storage.getItem('snakeHighScore').then(score => {
       updateHighScore(score);
     });
   } else {
-    setTimeout(() => storageReady(), 300);
+    setTimeout(() => readyStorage(), 300);
   }
 };
 
 window.onload = () => {
   storage.setup();
-  resizeCanvas();
+  c.resize();
+  grid.updateWidth(c.canvas);
+
+  if (window.innerWidth > 600) hideTouchButtons();
 
   document.body.appendChild(c.canvas);
 
@@ -198,7 +173,7 @@ window.onload = () => {
   score.innerHTML = state.score.toString();
 
   menu = document.querySelector('.menu');
-  storageReady();
+  readyStorage();
 
   highScore = document.querySelector('span');
 
@@ -207,27 +182,21 @@ window.onload = () => {
 
   startBtn = document.querySelector('button');
   startBtn.addEventListener('click', () => startGame());
-  window.addEventListener('resize', resizeCanvas);
 
-  touchControls('up');
-  touchControls('down');
-  touchControls('right');
-  touchControls('left');
+  window.addEventListener('resize', () => {
+    c.resize();
+    grid.updateWidth(c.canvas);
+
+    window.innerWidth <= 600 ? showTouchButtons() : hideTouchButtons();
+  });
+
+  touchControls(controller, 'up');
+  touchControls(controller, 'down');
+  touchControls(controller, 'right');
+  touchControls(controller, 'left');
 
   getTheme();
-  c.render(ctx);
+  c.render();
 
   loop = gameLoop;
-};
-
-const touchControls = (direction: string): void => {
-  const control = document.getElementById(direction);
-
-  control.addEventListener('touchstart', () => {
-    controller[direction] = true;
-  });
-
-  control.addEventListener('touchend', () => {
-    controller[direction] = false;
-  });
 };
