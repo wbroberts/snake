@@ -1,7 +1,7 @@
 {
   "name": "snake",
   "version": "1.0.0",
-  "description": "A typescript boilerplate",
+  "description": "Classic snake game written in Typescript",
   "main": "index.bundle.js",
   "scripts": {
     "nodemon": "nodemon dist/js/index.bundle.js",
