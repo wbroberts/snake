@@ -68,7 +68,7 @@ const gameLoop = () => {
     return;
   }
 
-  // Update game if enough time has ellapsed
+  // Update game if enough time has elapsed
   if (gameTime >= timeStep) {
     snake.move();
 
@@ -153,7 +153,9 @@ const readyStorage = () => {
   if (storage.isReady) {
     menu.className = 'menu slide-in';
     storage.getItem('snakeHighScore').then(score => {
-      updateHighScore(score);
+      if (score) {
+        updateHighScore(score);
+      }
     });
   } else {
     setTimeout(() => readyStorage(), 300);

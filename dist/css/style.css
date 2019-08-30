@@ -167,3 +167,18 @@ i {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
+.git-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.github {
+  cursor: pointer;
+  display: block;
+  height: 1.5rem;
+  opacity: 0.8;
+  text-align: center;
+  width: 1.5rem;
+}

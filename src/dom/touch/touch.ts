@@ -16,8 +16,14 @@ export const touchControls = (controller: Controller, direction: string): void =
   control.addEventListener('touchstart', () => {
     controller[direction] = true;
   });
+  control.addEventListener('mousedown', () => {
+    controller[direction] = true;
+  });
 
   control.addEventListener('touchend', () => {
+    controller[direction] = false;
+  });
+  control.addEventListener('mouseup', () => {
     controller[direction] = false;
   });
 };
